@@ -33,7 +33,7 @@ EXPOSE 8080 50000
 
 RUN curl https://pkg.jenkins.io/redhat-stable/jenkins.repo -o /etc/yum.repos.d/jenkins.repo && \
     rpm --import https://pkg.jenkins.io/redhat-stable/jenkins-ci.org.key && \
-    yum install -y centos-release-scl-rh && \
+    yum install -y centos-release-scl-rh docker-client && \
     curl https://copr.fedorainfracloud.org/coprs/alsadi/dumb-init/repo/epel-7/alsadi-dumb-init-epel-7.repo -o /etc/yum.repos.d/alsadi-dumb-init-epel-7.repo && \
     x86_EXTRA_RPMS=$(if [ "$(uname -m)" == "x86_64" ]; then echo -n java-1.8.0-openjdk.i686 java-1.8.0-openjdk-devel.i686 ; fi) && \
     INSTALL_PKGS="dejavu-sans-fonts rsync gettext git tar zip unzip openssl bzip2 dumb-init java-1.8.0-openjdk jenkins-2.107.3-1.1" && \
@@ -93,6 +93,6 @@ RUN /usr/local/bin/install-plugins.sh /opt/openshift/base-plugins.txt && \
 
 VOLUME ["/var/lib/jenkins"]
 
-USER 1001
+USER root
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["/usr/libexec/s2i/run"]
